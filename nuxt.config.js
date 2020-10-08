@@ -2,6 +2,11 @@ export default {
   // Target (https://go.nuxtjs.dev/config-target)
   target: 'static',
 
+  server: {
+    port: 5600, // default: 3000
+    // host: '0.0.0.0' // default: localhost
+  },
+
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
     title: 'estimator',
@@ -17,10 +22,20 @@ export default {
   css: [],
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
-  plugins: [],
+  plugins: [
+    '~/plugins/vue-placeholders.js',
+    '~/plugins/vue-observe-visibility.client.js',
+    { src: '~/plugins/nuxt-client-init.js', ssr: false },
+  ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)
-  components: true,
+  components: [
+    {
+      path: '~/components/ui/',
+      prefix: 'ui',
+      ignore: ['**/*.js'],
+    },
+  ],
 
   // Modules for dev and build (recommended) (https://go.nuxtjs.dev/config-modules)
   buildModules: [
@@ -28,6 +43,7 @@ export default {
     '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/stylelint
     '@nuxtjs/stylelint-module',
+    '@nuxtjs/style-resources',
   ],
 
   // Modules (https://go.nuxtjs.dev/config-modules)
@@ -42,6 +58,10 @@ export default {
     '@nuxt/content',
   ],
 
+  styleResources: {
+    scss: ['~/assets/styles/main.scss'],
+  },
+
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
 
@@ -50,4 +70,11 @@ export default {
 
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
+
+  publicRuntimeConfig: {
+    baseURL: process.env.BASE_URL || 'http://localhost:5600/',
+  },
+  privateRuntimeConfig: {
+    apiSecret: process.env.API_SECRET,
+  },
 }

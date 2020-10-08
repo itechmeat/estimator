@@ -6,9 +6,9 @@
       aria-label="main navigation"
     >
       <div class="navbar-brand">
-        <a class="navbar-item" href="/">
+        <n-link class="navbar-item" to="/">
           <img src="~assets/buefy.png" alt="Buefy" height="28" />
-        </a>
+        </n-link>
 
         <div class="navbar-burger">
           <span />
@@ -31,7 +31,7 @@
       </aside>
 
       <div class="container column is-10">
-        <nuxt />
+        <nuxt keep-alive />
       </div>
     </section>
   </div>
@@ -46,11 +46,6 @@ export default {
           title: 'Home',
           icon: 'home',
           to: { name: 'index' },
-        },
-        {
-          title: 'Inspire',
-          icon: 'lightbulb',
-          to: { name: 'inspire' },
         },
       ],
     }
