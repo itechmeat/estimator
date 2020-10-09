@@ -6,9 +6,7 @@
       aria-label="main navigation"
     >
       <div class="navbar-brand">
-        <n-link class="navbar-item" to="/">
-          <img src="~assets/buefy.png" alt="Buefy" height="28" />
-        </n-link>
+        <n-link class="navbar-item logo" to="/"> Estimator </n-link>
 
         <div class="navbar-burger">
           <span />
@@ -18,18 +16,7 @@
       </div>
     </nav>
 
-    <section class="main-content columns">
-      <aside class="column is-2 section">
-        <p class="menu-label is-hidden-touch">General</p>
-        <ul class="menu-list">
-          <li v-for="(item, key) of items" :key="key">
-            <nuxt-link :to="item.to" exact-active-class="is-active">
-              <b-icon :icon="item.icon" /> {{ item.title }}
-            </nuxt-link>
-          </li>
-        </ul>
-      </aside>
-
+    <section class="main-content">
       <div class="container column is-10">
         <nuxt keep-alive />
       </div>
@@ -52,3 +39,10 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.logo {
+  font-size: 24px;
+  font-weight: normal;
+}
+</style>
