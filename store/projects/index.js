@@ -118,6 +118,25 @@ export const actions = {
     db.tasks.delete(id)
     dispatch('fetchTasks')
   },
+
+  updateTasks({ commit, dispatch }, list) {
+    const result = []
+
+    list.forEach((item, index) => {
+      result.push({
+        ...item,
+        order: (index + 1) * 10,
+      })
+    })
+
+    commit(TYPES.SET_TASKS, result)
+
+    result.forEach((item) => {
+      db.tasks.put(item)
+    })
+
+    dispatch('fetchTasks')
+  },
 }
 
 function mergeRequiredKeys(obj) {
