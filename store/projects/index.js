@@ -3,8 +3,10 @@ import uuid from 'uuid/v4'
 
 import * as TYPES from './types'
 
-// const fields = [
+// const task = [
 //   '++id',
+//   'projectId',
+//   'parentTaskId',
 //   'name',
 //   'description',
 //   'milestone',
@@ -16,6 +18,7 @@ import * as TYPES from './types'
 //   'status',
 //   'comments',
 //   'screenshots',
+//   'order',
 //   'createdAt',
 //   'updatedAt',
 // ]
@@ -23,12 +26,13 @@ import * as TYPES from './types'
 const db = new Dexie('estimator')
 db.version(1).stores({
   projects: '++id',
-  estimations: '++id',
+  tasks: '++id,projectId',
 })
 
 export const state = () => ({
   isLoading: false,
   projects: [],
+  tasks: [],
 })
 
 export const getters = {
@@ -36,6 +40,10 @@ export const getters = {
   [TYPES.GET_PROJECTS]: (state) => state.projects,
   [TYPES.GET_PROJECT_BY_ID]: (state) => (id) => {
     return state.projects.find((project) => project.id === id)
+  },
+  [TYPES.GET_TASKS]: (state) => state.tasks,
+  [TYPES.GET_TASK_BY_ID]: (state) => (id) => {
+    return state.tasks.find((task) => task.id === id)
   },
 }
 
@@ -50,6 +58,11 @@ export const mutations = {
     })
     state.projects = payload
   },
+
+  [TYPES.SET_TASKS]: (state, payload) => {
+    payload.sort((a, b) => a.order - b.order)
+    state.tasks = payload
+  },
 }
 
 export const actions = {
@@ -60,28 +73,14 @@ export const actions = {
   },
 
   saveProject({ dispatch }, project) {
-    const now = new Date().toUTCString()
-
-    const newProject = {
-      ...project,
-      updatedAt: now,
-    }
-
-    if (!newProject.createdAt) {
-      newProject.createdAt = now
-    }
-
-    if (!newProject.id) {
-      newProject.id = uuid()
-    }
+    const newProject = mergeRequiredKeys(project)
 
     db.projects
       .put(newProject)
       .then(() => {
-        // Then when data is stored, read from it
         dispatch('fetchProjects')
       })
-      .catch(function (error) {
+      .catch((error) => {
         // eslint-disable-next-line no-console
         console.error('createProject: ' + error)
       })
@@ -91,4 +90,51 @@ export const actions = {
     db.projects.delete(id)
     dispatch('fetchProjects')
   },
+
+  fetchTasks({ commit }, projectId) {
+    db.tasks
+      .where('projectId')
+      .equals(projectId)
+      .toArray((res) => {
+        commit(TYPES.SET_TASKS, res)
+      })
+  },
+
+  saveTask({ dispatch }, task) {
+    const newTask = mergeRequiredKeys(task)
+
+    db.tasks
+      .put(newTask)
+      .then(() => {
+        dispatch('fetchTasks')
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.error('saveTask: ' + error)
+      })
+  },
+
+  deleteTask({ dispatch }, id) {
+    db.tasks.delete(id)
+    dispatch('fetchTasks')
+  },
+}
+
+function mergeRequiredKeys(obj) {
+  const now = new Date().toUTCString()
+
+  const newObj = {
+    ...obj,
+    updatedAt: now,
+  }
+
+  if (!newObj.createdAt) {
+    newObj.createdAt = now
+  }
+
+  if (!newObj.id) {
+    newObj.id = uuid()
+  }
+
+  return newObj
 }
