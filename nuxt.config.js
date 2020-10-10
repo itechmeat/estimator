@@ -4,7 +4,7 @@ export default {
 
   server: {
     port: 5600, // default: 3000
-    // host: '0.0.0.0' // default: localhost
+    host: '0.0.0.0', // default: localhost
   },
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
