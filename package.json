@@ -33,8 +33,7 @@
     "nuxt": "^2.14.6",
     "nuxt-buefy": "^0.4.3",
     "vue-content-placeholders": "^0.2.1",
-    "vue-observe-visibility": "^0.4.6",
-    "vuedraggable": "^2.24.1"
+    "vue-observe-visibility": "^0.4.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
@@ -62,6 +61,7 @@
     "stylelint": "^13.7.2",
     "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^20.0.0",
+    "stylelint-scss": "^3.18.0",
     "ts-jest": "^26.4.1",
     "vue-jest": "^3.0.7"
   }
